@@ -1,0 +1,38 @@
+{
+    "name": "tile-editor",
+    "version": "0.0.1",
+    "description": "Tile-based level editor.",
+    "main": "src/main.es",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": ""
+    },
+    "author": "Daniel Stuessy",
+    "license": "see LICENSE",
+    "homepage": "",
+    "devDependencies": {
+        "babel-core": "^6.26.0",
+        "babel-loader": "^7.1.2",
+        "babel-preset-env": "^1.6.0",
+        "browser-sync": "^2.18.13",
+        "del": "^3.0.0",
+        "eslint-config-standard": "^10.2.1",
+        "eslint-plugin-import": "^2.7.0",
+        "eslint-plugin-node": "^5.2.0",
+        "eslint-plugin-promise": "^3.5.0",
+        "eslint-plugin-standard": "^3.0.1",
+        "gulp": "^3.9.1",
+        "gulp-babel": "^7.0.0",
+        "gulp-eslint": "^4.0.0",
+        "gulp-if": "^2.0.2",
+        "gulp-sequence": "^0.4.6",
+        "mousetrap": "^1.6.1",
+        "paper": "^0.11.4",
+        "sat": "^0.6.0",
+        "webpack-stream": "^4.0.0",
+        "yargs": "^9.0.1"
+    }
+}
