@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Boxman</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+        body * {
+            box-sizing: border-box;
+        }
+        #game {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="game"></canvas>
+    <div style="display:none;">
+        <img id="player-texture--forwards" src="./assets/box-man.png">
+        <img id="player-texture--backwards" src="./assets/box-man-backwards.png">
+    </div>
+    <script src="./bin/main.js"></script>
+</body>
+</html>
