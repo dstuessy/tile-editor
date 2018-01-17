@@ -1,4 +1,4 @@
 /* eslint-disable */
-import TextEditor from './TextEditor'
+import TileEditor from './TileEditor'
 
 new TextEditor()
