@@ -1,6 +1,5 @@
 import StateMachine from './state/StateMachine'
 import NormalState from './state/NormalState'
-// import HelloState from './state/HelloState'
 import EventEmitter from './event/EventEmitter'
 import Key from './lib/Key.es'
 
