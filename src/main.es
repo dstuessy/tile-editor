@@ -1,4 +1,14 @@
 /* eslint-disable */
 import TileEditor from './TileEditor'
 
-new TextEditor()
+const editor = new TileEditor()
+
+editor.load()
+
+function update () {
+    editor.draw()
+    editor.update()
+    requestAnimationFrame(update)
+}
+
+update()
