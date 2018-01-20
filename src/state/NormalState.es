@@ -1,15 +1,12 @@
 import State from './State'
-import HelloState from './HelloState'
 
 export default class NormalState extends State {
-    draw () {
-        console.log('...')
+    draw (editor) {
+        for (const tile of editor.tiles) {
+            editor.fillCell(tile.pos, tile.color)
+        }
     }
     update (editor) {
-        if (editor.key.isDown(':')) {
-            return new HelloState()
-        }
-
         return this
     }
 }
