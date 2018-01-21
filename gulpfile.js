@@ -2,7 +2,7 @@ const gulp = require('gulp')
 const gulpSequence = require('gulp-sequence')
 const eslint = require('gulp-eslint')
 const gulpIf = require('gulp-if')
-const browserSync = require('browser-sync')
+const runElectron = require('gulp-run-electron')
 const del = require('del')
 const yargs = require('yargs')
 const webpack = require('webpack-stream')
@@ -23,7 +23,7 @@ gulp.task('transpile', () => gulp.src('src/main.es')
     .pipe(webpack({
         devtool: 'source-map',
         output: {
-            filename: 'main.js'
+            filename: 'index.js'
         },
         resolve: {
             extensions: ['.js', '.es']
@@ -43,18 +43,19 @@ gulp.task('transpile', () => gulp.src('src/main.es')
             ]
         }
     }))
-    .pipe(gulp.dest('run/bin')))
-gulp.task('clean:transpile', () => del(['run/bin/boxman.{js,js.map}']))
+    .pipe(gulp.dest('app/bin')))
+gulp.task('clean:transpile', () => del(['app/bin']))
 
 gulp.task('build', done => gulpSequence('lint', 'transpile')(done))
 gulp.task('clean:build', done => gulpSequence('clean:transpile')(done))
 
-gulp.task('default', ['build'])
+gulp.task('run', () => gulp.src('app')
+    .pipe(runElectron()))
 
-gulp.task('watch', ['build'], () => {
-    browserSync({
-        server: './run'
-    })
+gulp.task('default', gulpSequence('build', 'run'))
 
-    gulp.watch('src/**/*.es', () => gulpSequence('build')(browserSync.reload))
+gulp.task('watch', ['build', 'run'], () => {
+    gulp.watch([
+        'src/**/*.es'
+    ], ['build'])
 })

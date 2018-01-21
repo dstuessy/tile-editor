@@ -2,7 +2,7 @@
     "name": "tile-editor",
     "version": "0.0.1",
     "description": "Tile-based level editor.",
-    "main": "src/main.es",
+    "main": "run/main.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
@@ -19,6 +19,7 @@
         "babel-preset-env": "^1.6.0",
         "browser-sync": "^2.18.13",
         "del": "^3.0.0",
+        "electron": "^1.7.10",
         "eslint-config-standard": "^10.2.1",
         "eslint-plugin-import": "^2.7.0",
         "eslint-plugin-node": "^5.2.0",
@@ -28,6 +29,7 @@
         "gulp-babel": "^7.0.0",
         "gulp-eslint": "^4.0.0",
         "gulp-if": "^2.0.2",
+        "gulp-run-electron": "^3.0.1",
         "gulp-sequence": "^0.4.6",
         "mousetrap": "^1.6.1",
         "paper": "^0.11.4",
