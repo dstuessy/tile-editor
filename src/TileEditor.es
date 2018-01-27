@@ -1,3 +1,4 @@
+import fs from 'fs'
 import StateMachine from './state/StateMachine'
 import NormalState from './state/NormalState'
 import Key from './lib/Key.es'
@@ -14,16 +15,7 @@ export default class TileEditor {
         this.canvas = canvas
         this.ctx = canvas.getContext('2d')
         this.cellWidth = 32
-        this.tiles = [
-            new Tile(0, 0, 'blue'),
-            new Tile(0, 1, 'blue'),
-            new Tile(1, 1, 'blue'),
-            new Tile(1, 0, 'blue'),
-            new Tile(2, 2, 'red'),
-            new Tile(3, 3, 'red'),
-            new Tile(4, 4, 'green'),
-            new Tile(3, 5, 'green')
-        ]
+        this.pallete = []
         this.key = new Key()
         this.sm = new StateMachine(new NormalState())
 
@@ -33,8 +25,26 @@ export default class TileEditor {
             this.maximise()
         })
     }
-    load () {
-        // load any assets here
+    load (levelPath = '') {
+        if (!levelPath) {
+            throw TypeError("TileEditor.load(levelPath): 'levelPath' cannot be falsy.")
+        }
+        const filePath = `./level/${levelPath}`
+
+        fs.readFile(filePath, (err, content) => {
+            if (err) {
+                throw err
+            }
+            const level = JSON.parse(content)
+            const tiles = level.pallete || []
+
+            this.pallete = Object.keys(tiles).map((type) => {
+                const tile = tiles[type]
+                return new Tile(type, tile.positions, tile.color)
+            })
+        })
+    }
+    save () {
     }
     maximise () {
         this.canvas.width = this.window.innerWidth
@@ -55,6 +65,6 @@ export default class TileEditor {
         }
 
         this.ctx.fillStyle = color
-        this.ctx.fillRect(pos.x * this.cellWidth, pos.y * this.cellWidth, pos.x + this.cellWidth, pos.y + this.cellWidth)
+        this.ctx.fillRect(pos[0] * this.cellWidth, pos[1] * this.cellWidth, pos[0] + this.cellWidth, pos[1] + this.cellWidth)
     }
 }

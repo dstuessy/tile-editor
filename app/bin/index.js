@@ -98,7 +98,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var editor = new _TileEditor2.default(window, document.getElementById('game')); /* eslint-disable */
 
 
-editor.load();
+editor.load('1-1.tile');
 
 function update() {
     editor.clear();
@@ -122,19 +122,23 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _StateMachine = __webpack_require__(3);
+var _fs = __webpack_require__(3);
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _StateMachine = __webpack_require__(4);
 
 var _StateMachine2 = _interopRequireDefault(_StateMachine);
 
-var _NormalState = __webpack_require__(5);
+var _NormalState = __webpack_require__(6);
 
 var _NormalState2 = _interopRequireDefault(_NormalState);
 
-var _Key = __webpack_require__(6);
+var _Key = __webpack_require__(7);
 
 var _Key2 = _interopRequireDefault(_Key);
 
-var _Tile = __webpack_require__(7);
+var _Tile = __webpack_require__(8);
 
 var _Tile2 = _interopRequireDefault(_Tile);
 
@@ -157,7 +161,7 @@ var TileEditor = function () {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.cellWidth = 32;
-        this.tiles = [new _Tile2.default(0, 0, 'blue'), new _Tile2.default(0, 1, 'blue'), new _Tile2.default(1, 1, 'blue'), new _Tile2.default(1, 0, 'blue'), new _Tile2.default(2, 2, 'red'), new _Tile2.default(3, 3, 'red'), new _Tile2.default(4, 4, 'green'), new _Tile2.default(3, 5, 'green')];
+        this.pallete = [];
         this.key = new _Key2.default();
         this.sm = new _StateMachine2.default(new _NormalState2.default());
 
@@ -171,8 +175,31 @@ var TileEditor = function () {
     _createClass(TileEditor, [{
         key: 'load',
         value: function load() {
-            // load any assets here
+            var _this2 = this;
+
+            var levelPath = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+            if (!levelPath) {
+                throw TypeError("TileEditor.load(levelPath): 'levelPath' cannot be falsy.");
+            }
+            var filePath = './level/' + levelPath;
+
+            _fs2.default.readFile(filePath, function (err, content) {
+                if (err) {
+                    throw err;
+                }
+                var level = JSON.parse(content);
+                var tiles = level.pallete || [];
+
+                _this2.pallete = Object.keys(tiles).map(function (type) {
+                    var tile = tiles[type];
+                    return new _Tile2.default(type, tile.positions, tile.color);
+                });
+            });
         }
+    }, {
+        key: 'save',
+        value: function save() {}
     }, {
         key: 'maximise',
         value: function maximise() {
@@ -202,7 +229,7 @@ var TileEditor = function () {
             }
 
             this.ctx.fillStyle = color;
-            this.ctx.fillRect(pos.x * this.cellWidth, pos.y * this.cellWidth, pos.x + this.cellWidth, pos.y + this.cellWidth);
+            this.ctx.fillRect(pos[0] * this.cellWidth, pos[1] * this.cellWidth, pos[0] + this.cellWidth, pos[1] + this.cellWidth);
         }
     }]);
 
@@ -213,6 +240,12 @@ exports.default = TileEditor;
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -228,7 +261,7 @@ var _State = __webpack_require__(0);
 
 var _State2 = _interopRequireDefault(_State);
 
-var _decorate = __webpack_require__(4);
+var _decorate = __webpack_require__(5);
 
 var _decorate2 = _interopRequireDefault(_decorate);
 
@@ -265,7 +298,7 @@ var StateMachine = function () {
 exports.default = StateMachine;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -284,7 +317,7 @@ exports.default = function (target, decoration) {
 };
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -325,10 +358,32 @@ var NormalState = function (_State) {
             var _iteratorError = undefined;
 
             try {
-                for (var _iterator = editor.tiles[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                for (var _iterator = editor.pallete[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var tile = _step.value;
+                    var _iteratorNormalCompletion2 = true;
+                    var _didIteratorError2 = false;
+                    var _iteratorError2 = undefined;
 
-                    editor.fillCell(tile.pos, tile.color);
+                    try {
+                        for (var _iterator2 = tile.positions[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                            var pos = _step2.value;
+
+                            editor.fillCell(pos, tile.color);
+                        }
+                    } catch (err) {
+                        _didIteratorError2 = true;
+                        _iteratorError2 = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                                _iterator2.return();
+                            }
+                        } finally {
+                            if (_didIteratorError2) {
+                                throw _iteratorError2;
+                            }
+                        }
+                    }
                 }
             } catch (err) {
                 _didIteratorError = true;
@@ -358,7 +413,7 @@ var NormalState = function (_State) {
 exports.default = NormalState;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -406,34 +461,6 @@ var Key = function () {
 exports.default = Key;
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _Vector = __webpack_require__(8);
-
-var _Vector2 = _interopRequireDefault(_Vector);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Tile = function Tile(x, y, color) {
-    _classCallCheck(this, Tile);
-
-    this.pos = new _Vector2.default(x, y);
-    this.color = color;
-};
-
-exports.default = Tile;
-
-/***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -446,17 +473,22 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Vector = function Vector() {
-    var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-    var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+var Tile = function Tile() {
+    var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+    var pos = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+    var color = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
 
-    _classCallCheck(this, Vector);
+    _classCallCheck(this, Tile);
 
-    this.x = x;
-    this.y = y;
+    if (!type || !color) {
+        throw TypeError("new Tile(type, pos, color): 'type' and 'color' cannot be falsy");
+    }
+    this.type = type;
+    this.positions = pos;
+    this.color = color;
 };
 
-exports.default = Vector;
+exports.default = Tile;
 
 /***/ })
 /******/ ]);

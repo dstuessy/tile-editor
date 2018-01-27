@@ -45,7 +45,8 @@ gulp.task('transpile', () => gulp.src('src/main.es')
                     }
                 }
             ]
-        }
+        },
+        target: 'electron-renderer'
     }))
     .pipe(gulp.dest('app/bin')))
 gulp.task('clean:transpile', () => del(['app/bin']))
